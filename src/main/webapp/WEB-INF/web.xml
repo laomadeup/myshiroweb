@@ -1,0 +1,94 @@
+<!DOCTYPE web-app PUBLIC
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+    <display-name>Archetype Created Web Application</display-name>
+
+
+
+  <!-- 注册SpringMVC的前端控制器DispatchcerServlet -->
+  <servlet>
+    <servlet-name>DispatchcerServletSpringMVC</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <!-- 初始化SpringMVC容器 -->
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:spring-mvc.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <!-- 拦截 以.action结尾的请求-->
+  <servlet-mapping>
+    <servlet-name>DispatchcerServletSpringMVC</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+
+
+  <!--
+   shiro 1.1版本方式
+  <filter>
+      <filter-name>iniShiroFilter</filter-name>
+      <filter-class>org.apache.shiro.web.servlet.IniShiroFilter</filter-class>
+      <init-param>
+        <param-name>configPath</param-name>
+        <param-value>classpath:shiro.ini</param-value>
+      </init-param>
+    </filter>
+    <filter-mapping>
+      <filter-name>iniShiroFilter</filter-name>
+      <url-pattern>/*</url-pattern>
+    </filter-mapping>-->
+
+    <!--shiro 1.2版本-->
+<!--
+    <listener>
+        <listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
+    </listener>
+
+    <context-param>
+        <param-name>shiroEnvironmentClass</param-name>
+        <param-value>org.apache.shiro.web.env.IniWebEnvironment</param-value>
+    </context-param>
+    <context-param>
+        <param-name>shiroConfigLocations</param-name>
+        <param-value>classpath:shiro.ini</param-value>
+    </context-param>
+-->
+
+<!--spring集成-->
+
+  <!--DelegatingFilterProxy 会自动到 Spring 容器中查找名字为 shiroFilter 的 bean 并把 filter 请求交给它处理。-->
+
+  <filter>
+    <filter-name>shiroFilter</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    <init-param>
+      <param-name>targetFilterLifecycle</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>shiroFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>
+      classpath:spring-beans.xml,
+      classpath:spring-shiro-web.xml
+    </param-value>
+  </context-param>
+
+  <listener>
+    <listener-class>
+      org.springframework.web.context.ContextLoaderListener
+    </listener-class>
+  </listener>
+
+
+</web-app>
+
+
